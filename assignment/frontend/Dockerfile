@@ -1,8 +1,9 @@
 FROM node:14
 
 WORKDIR /app 
-COPY ./frontend/package.json ./
-COPY ./frontend/package-lock.json ./
+COPY ./assignment/frontend/package.json ./
+COPY ./assignment/frontend/package-lock.json ./
+
 RUN npm install web-vitals
 RUN npm install
 

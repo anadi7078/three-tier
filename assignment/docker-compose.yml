@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - DATABASE_URL=postgresql://anadi:anadipass@db:5432/anadidb
+      - DATABASE_NAME=anadidb
+      - DATABASE_USER=anadi
+      - DATABASE_PASSWORD=anadipass
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=anadidb
+      - POSTGRES_USER=anadi
+      - POSTGRES_PASSWORD=anadipass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
